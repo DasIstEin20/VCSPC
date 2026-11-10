@@ -1,5 +1,6 @@
 #include "StdAfx.h"
 #include "UserDisplay.h"
+#include "VcsScmSaHud.h"
 
 #include "Messages.h"
 #include "Timer.h"
@@ -67,69 +68,39 @@ void CPager::ClearMessages()
 
 void CPager::AddMessage(char* pMsg, short nSpeed, short nPriority)
 {
-	unsigned char	bLoopCounter = 0;
+	AddMessageWithNumber(pMsg, -1, static_cast<unsigned short>(nSpeed), static_cast<unsigned short>(nPriority));
+}
 
-	while ( bLoopCounter < NUM_MAX_PAGER_MESSAGES )
+bool CPager::AddMessageWithNumber(char* pMsg, int number, unsigned short speed, unsigned short priority)
+{
+	if (!pMsg || strlen(pMsg) >= 256)
+		return false;
+	char formatted[512];
+	CMessages::InsertNumberInString(pMsg, number, -1, -1, -1, -1, -1, formatted);
+	const size_t length = strlen(formatted);
+	if (length >= 256)
+		return false;
+	for (unsigned int slot = 0; slot < NUM_MAX_PAGER_MESSAGES; ++slot)
 	{
-		if ( Messages[bLoopCounter].pMessage )
-		{
-			if ( Messages[bLoopCounter].wPriority < nPriority )
-			{
-				if ( bLoopCounter < NUM_MAX_PAGER_MESSAGES - 1 )
-				{
-					unsigned char bStackPointer = NUM_MAX_PAGER_MESSAGES - 1;
-					do
-					{
-						Messages[bStackPointer].pMessage = Messages[bStackPointer - 1].pMessage;
-						Messages[bStackPointer].wSpeed = Messages[bStackPointer - 1].wSpeed;
-						Messages[bStackPointer].wFirstShownLetter = Messages[bStackPointer - 1].wFirstShownLetter;
-						Messages[bStackPointer].wStringLength = Messages[bStackPointer - 1].wStringLength;
-						Messages[bStackPointer].wPriority = Messages[bStackPointer - 1].wPriority;
-						Messages[bStackPointer].nLastLetterChangeTime = Messages[bStackPointer - 1].nLastLetterChangeTime;
-						Messages[bStackPointer].nMessageNumbers[0] = Messages[bStackPointer - 1].nMessageNumbers[0];
-						Messages[bStackPointer].nMessageNumbers[1] = Messages[bStackPointer - 1].nMessageNumbers[1];
-						Messages[bStackPointer].nMessageNumbers[2] = Messages[bStackPointer - 1].nMessageNumbers[2];
-						Messages[bStackPointer].nMessageNumbers[3] = Messages[bStackPointer - 1].nMessageNumbers[3];
-						Messages[bStackPointer].nMessageNumbers[4] = Messages[bStackPointer - 1].nMessageNumbers[4];
-						Messages[bStackPointer].nMessageNumbers[5] = Messages[bStackPointer - 1].nMessageNumbers[5];
-					}
-					while ( --bStackPointer > bLoopCounter );
-				}
-				Messages[bLoopCounter].pMessage = pMsg;
-				Messages[bLoopCounter].wSpeed = nSpeed;
-				Messages[bLoopCounter].wFirstShownLetter = -(bLetterSlots+10);
-				Messages[bLoopCounter].wStringLength = static_cast<short>(strlen(pMsg));
-				Messages[bLoopCounter].wPriority = nPriority;
-				Messages[bLoopCounter].nLastLetterChangeTime = CTimer::m_snTimeInMilliseconds + nSpeed;
-				Messages[bLoopCounter].nMessageNumbers[0] = -1;
-				Messages[bLoopCounter].nMessageNumbers[1] = -1;
-				Messages[bLoopCounter].nMessageNumbers[2] = -1;
-				Messages[bLoopCounter].nMessageNumbers[3] = -1;
-				Messages[bLoopCounter].nMessageNumbers[4] = -1;
-				Messages[bLoopCounter].nMessageNumbers[5] = -1;
-				break;
-			}
-		}
-		else
-		{
-			Messages[bLoopCounter].pMessage = pMsg;
-			Messages[bLoopCounter].wSpeed = nSpeed;
-			Messages[bLoopCounter].wFirstShownLetter = -(bLetterSlots+10);
-			Messages[bLoopCounter].wStringLength = static_cast<short>(strlen(pMsg));
-			Messages[bLoopCounter].wPriority = nPriority;
-			Messages[bLoopCounter].nLastLetterChangeTime = CTimer::m_snTimeInMilliseconds + nSpeed;
-			Messages[bLoopCounter].nMessageNumbers[0] = -1;
-			Messages[bLoopCounter].nMessageNumbers[1] = -1;
-			Messages[bLoopCounter].nMessageNumbers[2] = -1;
-			Messages[bLoopCounter].nMessageNumbers[3] = -1;
-			Messages[bLoopCounter].nMessageNumbers[4] = -1;
-			Messages[bLoopCounter].nMessageNumbers[5] = -1;
-			break;
-		}
-		++bLoopCounter;
+		if (Messages[slot].pMessage && Messages[slot].wPriority >= priority)
+			continue;
+		for (unsigned int tail = NUM_MAX_PAGER_MESSAGES - 1; tail > slot; --tail)
+			Messages[tail] = Messages[tail - 1];
+		auto& message = Messages[slot];
+		message.pMessage = pMsg;
+		message.wSpeed = speed;
+		message.wPriority = priority;
+		message.wFirstShownLetter = -(bLetterSlots + 10);
+		message.wStringLength = static_cast<short>(length);
+		message.nLastLetterChangeTime = CTimer::m_snTimeInMilliseconds + speed;
+		message.nMessageNumbers[0] = number;
+		for (unsigned int index = 1; index < 6; ++index)
+			message.nMessageNumbers[index] = -1;
+		if (slot == 0)
+			CMessages::AddToPreviousBriefArray(pMsg, number, -1, -1, -1, -1, -1, nullptr);
+		return true;
 	}
-	if ( !bLoopCounter )
-		CMessages::AddToPreviousBriefArray(Messages[0].pMessage, -1, -1, -1, -1, -1, -1, NULL);
+	return true;
 }
 
 void CPager::Process()
@@ -209,7 +180,8 @@ void COnscreenTimer::ProcessForDisplay()
 	{
 		m_bEnabled = true;
 		m_timer.m_bShown = true;
-		sprintf(m_timer.m_cDisplayedText, "%d:%02d", *m_timer.m_pVariable / 1000 / 60 % 100, *m_timer.m_pVariable / 1000 % 60);
+		if (!VcsScmSaHudFormatClock(&m_timer))
+			sprintf(m_timer.m_cDisplayedText, "%d:%02d", *m_timer.m_pVariable / 1000 / 60 % 100, *m_timer.m_pVariable / 1000 % 60);
 	}
 	else
 		m_timer.m_bShown = false;
@@ -237,6 +209,7 @@ void COnscreenTimer::ProcessForDisplay()
 				break;
 			}
 
+			VcsScmSaHudFormatCounter(&m_counter[i]);
 			m_bEnabled = true;
 			m_counter[i].m_bShown = true;
 		}
@@ -249,6 +222,8 @@ void COnscreenTimer::Process()
 	{
 		if ( m_timer.m_pVariable )
 		{
+			if (VcsScmSaHudProcessClock(&m_timer))
+				return;
 			int			nStep = static_cast<int>(CTimer::ms_fTimeStep * 0.02 * 1000.0);
 			int			nPrevTime = *m_timer.m_pVariable;
 

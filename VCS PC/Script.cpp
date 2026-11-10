@@ -1,5 +1,6 @@
 #include "StdAfx.h"
 #include "Script.h"
+#include "VcsScmRuntime.h"
 
 #include "General.h"
 #include "Vehicle.h"
@@ -23,8 +24,21 @@ CScriptFunction		CRunningScript::ms_scriptFunction[NUM_SCRIPTS];
 int16 &CTheScripts::NumberOfScriptSearchLights = *(short*)0xA90830;
 
 // Wrappers
-WRAPPER bool CTheScripts::IsPlayerOnAMission() { EAXJMP(0x464D50); }
-WRAPPER void CTheScripts::Process() { EAXJMP(0x46A000); }
+bool CTheScripts::IsPlayerOnAMission()
+{
+	if (VcsScmEnabled())
+		return VcsScmIsPlayerOnMission();
+	const int offset = *reinterpret_cast<int*>(0xA476AC);
+	return offset && *reinterpret_cast<unsigned int*>(scmBlock + offset) == 1;
+}
+
+void CTheScripts::Process()
+{
+	if (VcsScmEnabled())
+		VcsScmProcess();
+	else
+		reinterpret_cast<void(__cdecl*)()>(0x46A000)();
+}
 WRAPPER CRunningScript* CTheScripts::StartNewScript(void* nScriptIP) { WRAPARG(nScriptIP); EAXJMP(0x464C20); }
 WRAPPER void CTheScripts::RenderAllSearchLights(void) { EAXJMP(0x493E30); }
 WRAPPER void CRunningScript::StoreParameters(int16 numParams) { WRAPARG(numParams); EAXJMP(0x464370); }
@@ -1274,16 +1288,28 @@ static void SaveVariable(char* pVarName, long nIndex, long nArraySize = 1)
 
 void CTheScripts::Init()
 {
-	TheScriptsInitFunc();
+	if (VcsScmEnabled())
+		VcsScmInitialise();
+	else
+		TheScriptsInitFunc();
 }
 
 void CTheScripts::SaveAllScripts()
 {
+	if (VcsScmEnabled()) {
+		VcsScmSave();
+		return;
+	}
 	#include "SaveVars.inc"
 }
 
 void CTheScripts::LoadAllScripts()
 {
+	if (VcsScmEnabled()) {
+		Init();
+		VcsScmLoad();
+		return;
+	}
 	std::map<long,short>	cGlobalVarsMap;
 	int						nSavedVars;
 
@@ -1293,6 +1319,11 @@ void CTheScripts::LoadAllScripts()
 
 	// Load variables
 	C_PcSave::PcClassLoadRoutine(&nSavedVars, sizeof(int));
+	if (nSavedVars == 0x4D565356) {
+		*reinterpret_cast<bool*>(0xC16EFC) = true;
+		LogToFile("This save requires ScriptVM.enabled=1");
+		return;
+	}
 	for ( int i = 0; i < nSavedVars; ++i )
 	{
 		long											nHash;
@@ -1318,11 +1349,17 @@ void CTheScripts::LoadAllScripts()
 
 void CTheScripts::StartTestScript()
 {
-	StartNewScript(scmBlock);
+	if (VcsScmEnabled())
+		VcsScmStart();
+	else
+		StartNewScript(scmBlock);
 }
 
 void CTheScripts::ZeroMissionVars()
 {
+	// The custom VM owns initialization of its mission-local memory.
+	if (VcsScmEnabled())
+		return;
 	unsigned long	dwNumOfVars = (*reinterpret_cast<unsigned long*>(static_cast<unsigned char*>(scmBlock)+3)) / 4;
 
 	memset(&reinterpret_cast<int*>(scmBlock)[HIGHEST_VAR_USED+1], 0, (dwNumOfVars - HIGHEST_VAR_USED) * 4 - 4);

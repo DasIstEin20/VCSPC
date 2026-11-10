@@ -3,6 +3,10 @@
 
 #include "Camera.h"
 #include "Script.h"
+#include "VcsScmRuntime.h"
+#include "VcsScmSaPresentation.h"
+#include "VcsScmSaHud.h"
+#include "VcsScmHostSaRadar.h"
 #include "ColAccel.h"
 #include "NeoCarpipe.h"
 #include "TxdStore.h"
@@ -60,10 +64,14 @@ CGame::Initialise(const char *fileName)
 	CFileLoader::LoadLevels();
 	CColAccel::endCache();
 	CGame::Init2(fileName);
+	if (VcsScmEnabled() && !VcsScmReady())
+		return false;
 	sub_70F9E0();
 	LoadingScreen("Loading the Game", "Start script", NULL);
 	CTheScripts::StartTestScript();
 	CTheScripts::Process();
+	if (VcsScmEnabled() && !VcsScmReady())
+		return false;
 	TheCamera.Process();
 	CGame::Init3(fileName);
 	return true;
@@ -245,6 +253,7 @@ static Reversed Process_kill(0x53BEE0, 0x53C23F);
 void
 CGame::Process(void)
 {
+	VcsScmObserveFrame();
 	CPad::UpdatePads();
 	g_LoadMonitor.BeginFrame();
 
@@ -253,7 +262,8 @@ CGame::Process(void)
 	timer = CTimer::GetCurrentTimeInMilliseconds() - timer;
 	CCutsceneMgr::Update();
 	DebugMenuProcess();
-	if(!CCutsceneMgr::ms_cutsceneProcessing && !CTimer::m_CodePause)
+	if (!CCutsceneMgr::ms_cutsceneProcessing && !CTimer::m_CodePause &&
+		(!VcsScmEnabled() || !VcsScmSaPauseDisabled() || FrontEndMenuManager.m_bMenuActive))
 		FrontEndMenuManager.Process();
 	CTheZones::Update();
 	CCover__Update();
@@ -268,6 +278,13 @@ CGame::Process(void)
 		CClock::Update();
 		CWeather::Update();
 		CTheScripts::Process();
+		if (VcsScmEnabled() && !VcsScmReady())
+			return;
+		if (VcsScmEnabled()) {
+			VcsScmSaMarkersRender();
+			if (!VcsScmReady())
+				return;
+		}
 		// CCollision::Update();	// no-op
 		ThePaths.UpdateStreaming(false);
 		// CTrain::UpdateTrains();	// no-op
@@ -298,7 +315,11 @@ CGame::Process(void)
 		CClouds::Update();
 		CMovingThings__Update();
 		CWaterCannons__Update();
+		if (VcsScmEnabled() && !VcsScmSaHudBeginDisplay())
+			return;
 		CUserDisplay::Process();
+		if (VcsScmEnabled() && !VcsScmSaHudEndDisplay())
+			return;
 		CReplay::Update();
 		CWorld::Process();
 		g_LoadMonitor.EndFrame();

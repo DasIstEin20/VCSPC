@@ -87,6 +87,84 @@
     <ClCompile Include="Script.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="VcsScmRuntime.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VcsScmHost.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VcsScmHostActors.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VcsScmHostModels.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VcsScmHostEnvironment.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VcsScmHostCamera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VcsScmHostPlayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VcsScmHostSaCombat.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VcsScmHostSaFires.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VcsScmHostSaGarages.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VcsScmHostSaPeds.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VcsScmHostSaPresentation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VcsScmHostSaShared.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VcsScmHostSaSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VcsScmHostSaVehicleState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VcsScmHostSaVehicles.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VcsScmHostSaWorld.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VcsScmSaCommand.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VcsScmSaContracts.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VcsScmSaHud.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VcsScmHostSaObjects.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VcsScmHostSaPopulation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VcsScmHostSaRadar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VcsScmHostSaSpatial.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VcsScmHostSaStatistics.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VcsScmHostSaTasks.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="CutsceneManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -349,6 +427,42 @@
     </ClInclude>
     <ClInclude Include="Script.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VcsScmRuntime.h">
+      <Filter>Header Files\SCM</Filter>
+    </ClInclude>
+    <ClInclude Include="VcsScmHost.h">
+      <Filter>Header Files\SCM</Filter>
+    </ClInclude>
+    <ClInclude Include="VcsScmHostActors.h">
+      <Filter>Header Files\SCM</Filter>
+    </ClInclude>
+    <ClInclude Include="VcsScmHostInternal.h">
+      <Filter>Header Files\SCM</Filter>
+    </ClInclude>
+    <ClInclude Include="VcsScmHostSaGarages.h">
+      <Filter>Header Files\SCM</Filter>
+    </ClInclude>
+    <ClInclude Include="VcsScmHostSaShared.h">
+      <Filter>Header Files\SCM</Filter>
+    </ClInclude>
+    <ClInclude Include="VcsScmSaCommand.h">
+      <Filter>Header Files\SCM</Filter>
+    </ClInclude>
+    <ClInclude Include="VcsScmSaHud.h">
+      <Filter>Header Files\SCM</Filter>
+    </ClInclude>
+    <ClInclude Include="VcsScmSaPresentation.h">
+      <Filter>Header Files\SCM</Filter>
+    </ClInclude>
+    <ClInclude Include="VcsScmHostSaPopulation.h">
+      <Filter>Header Files\SCM</Filter>
+    </ClInclude>
+    <ClInclude Include="VcsScmHostSaRadar.h">
+      <Filter>Header Files\SCM</Filter>
+    </ClInclude>
+    <ClInclude Include="VcsScmSaStatistics.h">
+      <Filter>Header Files\SCM</Filter>
     </ClInclude>
     <ClInclude Include="CutsceneManager.h">
       <Filter>Header Files</Filter>

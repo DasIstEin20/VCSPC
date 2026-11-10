@@ -1,6 +1,8 @@
 #ifndef __CSTATS
 #define __CSTATS
 
+#include "VcsScmSaStatistics.h"
+
 #define STATS_OFFSET        120
 #define STATS_BLANK_OFFSET  320
 
@@ -444,6 +446,7 @@ static_assert(MAX_BLANK_STATS == 338, "Messed up stats enumerators!");
 class CStats
 {
 public:
+	static VcsScmStatisticsState ScmStatistics;
 	static void Init(void);
 	static long double	CalcPlayerStat(unsigned int statID);
 	static void			IncrementStat(unsigned int statID, float fAmount);

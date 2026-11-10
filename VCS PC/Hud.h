@@ -110,6 +110,9 @@ public:
 	static void		SetVehicleName(char* carName);
 	static void		SetZoneName(char* zoneName, bool bIgnoreIntID);
 	static void		SetPagerMessage(char* pMsg);
+	static bool		IsPagerOn();
+	static void		ClearScmSmallMessages();
+	static void		SetScmHelpMessage(const char* text, bool permanent, bool duringWidescreen);
 	static bool		HelpMessageShown();
 
 	static void		SetFontScale(float w, float h);

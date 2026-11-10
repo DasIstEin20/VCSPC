@@ -48,6 +48,7 @@ enum eOperandType : int8
 class CRunningScript
 {
 	friend class			CScriptFunction;
+	friend class VcsScmSaGateway;
 public:
 	static CScriptFunction	ms_scriptFunction[NUM_SCRIPTS];
 
