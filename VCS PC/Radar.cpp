@@ -1,5 +1,6 @@
 #include "StdAfx.h"
 #include "Radar.h"
+#include "VcsScmHostSaRadar.h"
 #include "Frontend.h"
 
 #include "PlayerInfo.h"
@@ -174,6 +175,7 @@ void CRadar::LoadTextures()
 	for ( int i = 0; i < NUM_BLIP_SPRITES; ++i )
 		RadarBlipSprites[i].SetTextureFromSPTA(HudSPTA, RadarBlipSpriteFilenames[i]);
 
+	VcsScmLoadSaRadarSprites(HudSPTA);
 	HudSPTA.CloseArchive();
 }
 

@@ -14,10 +14,10 @@ private:
 	struct
 	{
 		char*				pMessage;
-		short				wSpeed;
+		unsigned short			wSpeed;
 		short				wFirstShownLetter;
 		short				wStringLength;
-		short				wPriority;
+		unsigned short			wPriority;
 		int					nLastLetterChangeTime;
 		int					nMessageNumbers[6];
 	}					Messages[NUM_MAX_PAGER_MESSAGES];
@@ -29,6 +29,7 @@ public:
 	void				Init();
 	void				ClearMessages();
 	void				AddMessage(char* pMsg, short nSpeed, short nPriority);
+	bool				AddMessageWithNumber(char* pMsg, int number, unsigned short speed, unsigned short priority);
 	void				Process();
 };
 

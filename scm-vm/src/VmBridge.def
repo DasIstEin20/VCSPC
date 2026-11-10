@@ -1,0 +1,3 @@
+LIBRARY "VCSPC.ScmVm"
+EXPORTS
+    VcspcVmGetApi

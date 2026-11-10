@@ -65,7 +65,9 @@
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Dev Build|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
-  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Label="UserMacros">
+    <ReVcsSourceDir Condition="'$(ReVcsSourceDir)'==''">$(SolutionDir)..\reVCS\</ReVcsSourceDir>
+  </PropertyGroup>
   <PropertyGroup>
     <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
@@ -109,7 +111,7 @@
       <WarningLevel>Level4</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <BufferSecurityCheck>true</BufferSecurityCheck>
-      <AdditionalIncludeDirectories>$(BOOST_ROOT);$(SolutionDir)dependencies\include;$(SolutionDir)dependencies\include\rwsdk;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ReVcsSourceDir)\reVCS\src\core;$(ProjectDir)..\scm-vm\include;$(BOOST_ROOT);$(SolutionDir)dependencies\include;$(SolutionDir)dependencies\include\rwsdk;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ExceptionHandling>Sync</ExceptionHandling>
       <FloatingPointModel>Fast</FloatingPointModel>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
@@ -172,7 +174,7 @@ popd</Command>
       <WarningLevel>Level4</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <BufferSecurityCheck>true</BufferSecurityCheck>
-      <AdditionalIncludeDirectories>$(BOOST_ROOT);$(SolutionDir)dependencies\include;$(SolutionDir)dependencies\include\rwsdk;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ReVcsSourceDir)\reVCS\src\core;$(ProjectDir)..\scm-vm\include;$(BOOST_ROOT);$(SolutionDir)dependencies\include;$(SolutionDir)dependencies\include\rwsdk;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ExceptionHandling>Sync</ExceptionHandling>
       <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
       <FloatingPointModel>Fast</FloatingPointModel>
@@ -241,7 +243,7 @@ popd</Command>
       <WarningLevel>Level4</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <BufferSecurityCheck>true</BufferSecurityCheck>
-      <AdditionalIncludeDirectories>$(BOOST_ROOT);$(SolutionDir)dependencies\include;$(SolutionDir)dependencies\include\rwsdk;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ReVcsSourceDir)\reVCS\src\core;$(ProjectDir)..\scm-vm\include;$(BOOST_ROOT);$(SolutionDir)dependencies\include;$(SolutionDir)dependencies\include\rwsdk;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_NDEBUG;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ExceptionHandling>Sync</ExceptionHandling>
       <FloatingPointModel>Fast</FloatingPointModel>
@@ -309,7 +311,7 @@ popd</Command>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <BufferSecurityCheck>true</BufferSecurityCheck>
       <PreprocessorDefinitions>NDEBUG;COMPILE_RC;_INCLUDE_BETA_CODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(BOOST_ROOT);$(SolutionDir)dependencies\include;$(SolutionDir)dependencies\include\rwsdk;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ReVcsSourceDir)\reVCS\src\core;$(ProjectDir)..\scm-vm\include;$(BOOST_ROOT);$(SolutionDir)dependencies\include;$(SolutionDir)dependencies\include\rwsdk;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ExceptionHandling>Sync</ExceptionHandling>
       <FloatingPointModel>Fast</FloatingPointModel>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
@@ -425,6 +427,32 @@ popd</Command>
     <ClCompile Include="Replay.cpp" />
     <ClCompile Include="RW.cpp" />
     <ClCompile Include="Script.cpp" />
+    <ClCompile Include="VcsScmRuntime.cpp" />
+    <ClCompile Include="VcsScmHost.cpp" />
+    <ClCompile Include="VcsScmHostActors.cpp" />
+    <ClCompile Include="VcsScmHostModels.cpp" />
+    <ClCompile Include="VcsScmHostEnvironment.cpp" />
+    <ClCompile Include="VcsScmHostCamera.cpp" />
+    <ClCompile Include="VcsScmHostPlayer.cpp" />
+    <ClCompile Include="VcsScmHostSaCombat.cpp" />
+    <ClCompile Include="VcsScmHostSaFires.cpp" />
+    <ClCompile Include="VcsScmHostSaGarages.cpp" />
+    <ClCompile Include="VcsScmHostSaPeds.cpp" />
+    <ClCompile Include="VcsScmHostSaPresentation.cpp" />
+    <ClCompile Include="VcsScmHostSaShared.cpp" />
+    <ClCompile Include="VcsScmHostSaSystem.cpp" />
+    <ClCompile Include="VcsScmHostSaVehicleState.cpp" />
+    <ClCompile Include="VcsScmHostSaVehicles.cpp" />
+    <ClCompile Include="VcsScmHostSaWorld.cpp" />
+    <ClCompile Include="VcsScmSaCommand.cpp" />
+    <ClCompile Include="VcsScmSaContracts.cpp" />
+    <ClCompile Include="VcsScmSaHud.cpp" />
+    <ClCompile Include="VcsScmHostSaObjects.cpp" />
+    <ClCompile Include="VcsScmHostSaPopulation.cpp" />
+    <ClCompile Include="VcsScmHostSaRadar.cpp" />
+    <ClCompile Include="VcsScmHostSaSpatial.cpp" />
+    <ClCompile Include="VcsScmHostSaStatistics.cpp" />
+    <ClCompile Include="VcsScmHostSaTasks.cpp" />
     <ClCompile Include="Shadows.cpp" />
     <ClCompile Include="SpeechRecognition.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Dev Build|Win32'">true</ExcludedFromBuild>
@@ -539,6 +567,18 @@ popd</Command>
     <ClInclude Include="Replay.h" />
     <ClInclude Include="RW.h" />
     <ClInclude Include="Script.h" />
+    <ClInclude Include="VcsScmRuntime.h" />
+    <ClInclude Include="VcsScmHost.h" />
+    <ClInclude Include="VcsScmHostActors.h" />
+    <ClInclude Include="VcsScmHostInternal.h" />
+    <ClInclude Include="VcsScmHostSaGarages.h" />
+    <ClInclude Include="VcsScmHostSaShared.h" />
+    <ClInclude Include="VcsScmSaCommand.h" />
+    <ClInclude Include="VcsScmSaHud.h" />
+    <ClInclude Include="VcsScmSaPresentation.h" />
+    <ClInclude Include="VcsScmHostSaPopulation.h" />
+    <ClInclude Include="VcsScmHostSaRadar.h" />
+    <ClInclude Include="VcsScmSaStatistics.h" />
     <ClInclude Include="Shadows.h" />
     <ClInclude Include="SpeechRecognition.h" />
     <ClInclude Include="StaticPatcher.h" />

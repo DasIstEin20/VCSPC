@@ -12,6 +12,7 @@
 #include "General.h"
 #include "Building.h"
 #include "Script.h"
+#include "VcsScmRuntime.h"
 #include "Camera.h"
 #include "Text.h"
 #include "Hud.h"
@@ -556,6 +557,7 @@ BOOL CALLBACK CECheck(HWND hwnd, LPARAM lParam) {
 
 void /*__declspec(noreturn)*/ OnGameTermination()
 {
+	VcsScmShutdown();
 	CUpdateManager::InstallIfNeeded();
 
 	CUpdateManager::Terminate();
@@ -5203,6 +5205,7 @@ void InjectDelayedPatches()
 		CLEOGetTextFunc = nullptr;
 
 	TheScriptsInitFunc = (void(*)())(*(int*)0x53BDD8 + 0x53BDD7 + 5);
+	VcsScmInstallHooks();
 
 	Memory::InjectHook(0x6A0050, &CText::Get, PATCH_JUMP);
 

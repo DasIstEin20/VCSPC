@@ -4,6 +4,8 @@
 #include "Text.h"
 #include "Timer.h"
 
+VcsScmStatisticsState CStats::ScmStatistics = {};
+
 enum
 {
 	STATTYPE_EMPTY,
@@ -445,7 +447,7 @@ long CStats::ConstructStatLine(int nStat, int& nIndents)
 	if ( nStat == nTempValue++ )
 	{
 		// Longest insane jump distance (m)
-		float	fDist = static_cast<float>(PlayerStatsInteger[MAX_JUMP_DISTANCE]);
+		float	fDist = VcsScmStatisticsEnabled() ? ScmStatistics.maximumJumpDistance : static_cast<float>(PlayerStatsInteger[MAX_JUMP_DISTANCE]);
 		BuildStatLine("MXCARDM", &fDist, STATTYPE_FLOAT, nullptr);
 		return 0;
 	}
@@ -453,7 +455,7 @@ long CStats::ConstructStatLine(int nStat, int& nIndents)
 	if ( nStat == nTempValue++ )
 	{
 		// Greatest insane jump height (m)
-		float	fHeight = static_cast<float>(PlayerStatsInteger[MAX_JUMP_HEIGHT]);
+		float	fHeight = VcsScmStatisticsEnabled() ? ScmStatistics.maximumJumpHeight : static_cast<float>(PlayerStatsInteger[MAX_JUMP_HEIGHT]);
 		BuildStatLine("MXCARJM", &fHeight, STATTYPE_FLOAT, nullptr);
 		return 0;
 	}
